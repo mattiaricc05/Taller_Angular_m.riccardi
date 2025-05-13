@@ -1,4 +1,4 @@
-<!-- serie-list.component.html -->
+<!-- src/app/serie-list/serie-list.component.html -->
 <div class="container my-5" style="max-width: 900px">
   <div class="card shadow-sm rounded">
     <div class="card-header bg-primary text-white">
@@ -16,7 +16,11 @@
             </tr>
           </thead>
           <tbody>
-            <tr *ngFor="let s of series">
+            <tr 
+              *ngFor="let s of series" 
+              (click)="selectSerie(s)" 
+              style="cursor: pointer;"
+            >
               <td class="text-center">{{ s.id }}</td>
               <td>{{ s.name }}</td>
               <td>
@@ -30,13 +34,16 @@
         </table>
       </div>
     </div>
-
-    <!-- Aquí añadimos el footer con el promedio -->
-    <div class="card-footer text-end">
+    <div class="card-footer text-end" *ngIf="series.length > 0">
       <small class="text-muted">
         Promedio de temporadas:
         <strong>{{ averageSeasons | number:'1.2-2' }}</strong>
       </small>
     </div>
+  </div>
+
+  <!-- Este bloque muestra el detail cuando seleccionas -->
+  <div class="mt-4" *ngIf="selectedSerie">
+    <app-serie-detail [serieDetail]="selectedSerie"></app-serie-detail>
   </div>
 </div>

@@ -1,3 +1,38 @@
-<p>
-  serie-detail works!
-</p>
+<!-- serie-detail.component.html -->
+<ng-container *ngIf="serieDetail; else noSelection">
+  <div class="container my-4" style="max-width: 800px;">
+    <div class="card shadow-sm">
+      <img 
+        *ngIf="serieDetail." 
+        [src]="serieDetail.poster" 
+        [alt]="serieDetail.name" 
+        class="card-img-top"
+        style="object-fit: cover; height: 400px;"
+      >
+      <div class="card-body">
+        <h2 class="card-title">{{ serieDetail.name }}</h2>
+        <p class="mb-2">
+          <span class="badge bg-info text-dark">{{ serieDetail.channel }}</span>
+          <span class="badge bg-success">{{ serieDetail.seasons }} temp.</span>
+        </p>
+        <p class="card-text">{{ serieDetail.description }}</p>
+        <a 
+          *ngIf="serieDetail.webpage" 
+          [href]="serieDetail.webpage" 
+          target="_blank" 
+          class="btn btn-outline-primary"
+        >
+          Ir al sitio oficial
+        </a>
+      </div>
+    </div>
+  </div>
+</ng-container>
+
+<ng-template #noSelection>
+  <div class="container my-4" style="max-width: 800px;">
+    <div class="alert alert-secondary text-center">
+      Selecciona una serie para ver sus detalles.
+    </div>
+  </div>
+</ng-template>

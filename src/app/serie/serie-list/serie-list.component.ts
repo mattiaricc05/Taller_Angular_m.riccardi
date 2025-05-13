@@ -1,44 +1,43 @@
-import { Component, OnInit } from '@angular/core';
-import { SerieDetailModel } from '../serie-detail-model';
-import { SerieService } from '../serie.service';
-import { CommonModule } from '@angular/common';
+// src/app/serie-list/serie-list.component.ts
+import { Component, OnInit }          from '@angular/core';
+import { CommonModule }                from '@angular/common';
+import { SerieDetailModel }            from '../serie-detail-model';
+import { SerieService }                from '../serie.service';
+import { SerieDetailComponent }        from '../serie-detail/serie-detail.component';
 
 @Component({
   selector: 'app-serie-list',
-  templateUrl: './serie-list.component.html',
-  styleUrls: ['./serie-list.component.css'],
   standalone: true,
-  imports: [ CommonModule ]
+  imports: [ CommonModule, SerieDetailComponent ],  // importamos el detail
+  templateUrl: './serie-list.component.html',
+  styleUrls: ['./serie-list.component.css']
 })
 export class SerieListComponent implements OnInit {
+  series: SerieDetailModel[] = [];
+  averageSeasons = 0;
+  selectedSerie?: SerieDetailModel;   // ← aquí guardamos la serie clicada
 
-  series: Array<SerieDetailModel> = [];
-  averageSeasons: number = 0;  // ← nueva propiedad
+  constructor(private serieService: SerieService) {}
 
-  constructor(private serieService: SerieService) { }
-
-  getSeries(): void {
+  ngOnInit() {
     this.serieService.getSeries()
       .subscribe(data => {
         this.series = data;
-        this.calculateAverageSeasons();    // ← calcular al recibir datos
+        this.calculateAverageSeasons();
       });
   }
 
-  ngOnInit() {
-    this.getSeries();
-  }
-
-  // ← nuevo método
   calculateAverageSeasons(): void {
-    if (this.series.length === 0) {
+    if (!this.series.length) {
       this.averageSeasons = 0;
       return;
     }
-    const total = this.series
-      .map(s => s.seasons)
-      .reduce((sum, curr) => sum + curr, 0);
+    const total = this.series.reduce((sum, s) => sum + s.seasons, 0);
     this.averageSeasons = total / this.series.length;
   }
 
+  // ← al hacer click asignamos la serie seleccionada
+  selectSerie(s: SerieDetailModel): void {
+    this.selectedSerie = s;
+  }
 }
